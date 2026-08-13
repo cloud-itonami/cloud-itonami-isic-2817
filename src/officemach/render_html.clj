@@ -364,14 +364,25 @@
 
 (defn- yn [b] (if b "<span class=\"ok\">yes</span>" "<span class=\"err\">no</span>"))
 
-(defn- n1
-  "One-decimal rendering pinned to `Locale/ROOT` -- `clojure.core/format`
+(defn- dec-fmt
+  "Fixed-decimal rendering pinned to `Locale/ROOT` -- `clojure.core/format`
   follows the default locale, which would make the page's byte content
   depend on the machine that built it."
-  [v]
+  [places v]
   (if (number? v)
-    (String/format java.util.Locale/ROOT "%.1f" (object-array [(double v)]))
+    (String/format java.util.Locale/ROOT (str "%." places "f") (object-array [(double v)]))
     "&mdash;"))
+
+(defn- n1 [v] (dec-fmt 1 v))
+
+(defn- conf
+  "Confidence needs two decimals: the advisor's clean-path confidences
+  are 0.95 / 0.9 / 0.3, and rounding 0.95 to one place prints `1.0` --
+  a number the advisor never produced, on the column a reader uses to
+  judge the escalation threshold (`officemach.governor/confidence-floor`
+  is 0.6)."
+  [v]
+  (dec-fmt 2 v))
 
 (defn- tr [& cells] (str "        <tr>" (apply str (map #(str "<td>" % "</td>") cells)) "</tr>"))
 
@@ -471,7 +482,7 @@
         (str "<span class=\"" (if (= :approved (:status a)) "ok" "warn") "\">"
              (esc (kw (:status a))) " by " (esc (:by a)) "</span>")
         "<span class=\"muted\">人間に届かず</span>")
-      (n1 (:confidence s))
+      (conf (:confidence s))
       (scenario-outcome s)
       (scenario-rules s)))
 
@@ -483,7 +494,7 @@
           (tr (str "<code>:" (esc (name (:rule v))) "</code>")
               (str "<code>:" (esc (kw (:op f))) "</code>")
               (str "<code>" (esc (:subject f)) "</code>")
-              (n1 (:confidence f))
+              (conf (:confidence f))
               (esc (:detail v))))))
 
 ;; --- approvals ---
@@ -498,7 +509,7 @@
       (str "<code>" (esc subject) "</code>")
       (if by (str "<code>" (esc by) "</code>") "<span class=\"muted\">&mdash;</span>")
       (if reason (str "<code>:" (esc (kw reason)) "</code>") "&mdash;")
-      (if (number? confidence) (n1 confidence) "&mdash;")
+      (if (number? confidence) (conf confidence) "&mdash;")
       (esc scenario)))
 
 (defn- approver-retention-rows [{:keys [rows]}]
