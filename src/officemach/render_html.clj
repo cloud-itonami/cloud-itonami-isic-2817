@@ -223,12 +223,6 @@
                          :value {:equipment-id "test-bench-002" :maintenance-type :calibration
                                  :scheduled-date "2026-08-01" :actuate-equipment? false}})
 
-         (run-scenario! ctx "同一保守記録の二重スケジュール（mnt-1 は既に commit 済み）"
-                        coordinator
-                        {:op :schedule-maintenance :effect :propose :subject "mnt-1"
-                         :value {:equipment-id "assembly-001" :maintenance-type :calibration
-                                 :scheduled-date "2026-08-01" :actuate-equipment? false}})
-
          (run-scenario! ctx "未検証・未登録バッチ（batch-003）に対する出荷調整"
                         coordinator
                         {:op :coordinate-shipment :effect :propose :subject "ship-2"
