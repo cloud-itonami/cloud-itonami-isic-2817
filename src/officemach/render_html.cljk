@@ -31,7 +31,7 @@
   rather than shipping a console that advertises a guard nobody
   exercised.
 
-  Usage: `clojure -M:dev:render-html [out-file]`
+  Usage: `kbb -M:dev:render-html [out-file]`
   (default `docs/samples/operator-console.html`)."
   (:require [kotoba.lang.text :as str]
             [jp-go-dds.skin]
@@ -618,7 +618,7 @@
 
      "  <section class=\"card\">\n"
      "    <h2>この実行の要約</h2>\n"
-     "    <p class=\"muted\">このページは <code>clojure -M:dev:render-html</code> がビルド時に生成する。"
+     "    <p class=\"muted\">このページは <code>kbb -M:dev:render-html</code> がビルド時に生成する。"
      "<code>officemach.operation/build</code>（langgraph-clj StateGraph）を実際に "
      "<code>langgraph.graph/run*</code> で駆動し、<code>officemach.advisor</code> の提案を "
      "<code>officemach.governor/check</code> が検閲し、<code>officemach.phase/gate</code> が"
