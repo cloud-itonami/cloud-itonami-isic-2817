@@ -754,7 +754,7 @@
      "  <p>cloud-itonami-isic-2817 &middot; ISIC 2817 事務用機械器具製造（コンピュータ及び周辺機器を除く）。"
      "このアクターは組立・試験設備を直接操作せず、安全認証マーク（UL/CE 等）を自己発行しない —— "
      "いずれも恒久的・無条件の HARD ブロックである。ページは "
-     "<code>src/officemach/render_html.clj</code> がビルド時に生成した。</p>\n"
+     "<code>src/officemach/render_html.cljk</code> がビルド時に生成した。</p>\n"
      "</footer>\n"
      "</body></html>\n")))
 
