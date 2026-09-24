@@ -1,0 +1,33 @@
+;; What this vertical's robot physically does, declared for
+;; kotoba.robotics.process (kotoba-lang/robotics). `kbb -M:dev:physics` runs it.
+;;
+;; README: the ISIC 2817 plant assembles and tests non-computer office
+;; machinery -- photocopiers, cash registers, calculators, postage meters.
+;; The robots' physical work: the photocopier's fuser warm-up check at end of
+;; line (how long until the fuser roller is at fixing temperature), and
+;; carrying a finished multifunction copier to the packing station.
+;;
+;; Every number without a cited source is marked `estimate` in its :basis.
+{:physics/schema "itonami.physical-ai.spec.v1"
+ :repo "cloud-itonami/cloud-itonami-isic-2817"
+ :cases
+ [{:id :fuser-warm-up
+   :kind :thermal
+   :procedure "end-of-line warm-up check: the halogen heater's power is absorbed in the 1.5 mm aluminium fuser-roller wall (volumetric source); the outer surface loses heat to air at 25 C, the inner side to the heater cavity"
+   :params {:thickness-m 0.0015 :conductivity-w-mk 150.0 :density-kg-m3 2700.0 :specific-heat-j-kgk 900.0
+            :t0-c 25.0 :t-hot-c 25.0 :h-front-w-m2k 5.0 :t-back-ambient-c 25.0 :h-back-w-m2k 15.0
+            :threshold-c 180.0 :duration-s 120.0 :nodes 3}
+   :sweep {:param :q-gen-w-m3 :values [1.0e7 1.67e7 2.33e7 3.33e7 4.67e7]}
+   :quantity :time-to-threshold-s
+   :limit {:max 30.0 :basis "estimate: warm-up time a copier is specified to; the 180 C fixing temperature and the heater power per roller area (15-70 kW/m2 over the 1.5 mm wall) are estimates"}
+   :boundary {:lo 5.0e6 :hi 8.0e7}}
+  {:id :copier-to-packing
+   :kind :transport
+   :procedure "AMR carries a finished multifunction copier from the end-of-line test to the packing station (40 m); the copier's centre of gravity sits high on the AMR"
+   :params {:mass-kg 90.0 :distance-m 40.0 :v-max-mps 1.0 :a-max-mps2 0.5
+            :brake-decel-mps2 2.0 :drive-force-n 400.0 :crr 0.015
+            :cog-height-m 0.25 :support-half-length-m 0.35 :payload-cog-height-m 0.60
+            :max-time-s 600.0}
+   :sweep {:param :payload-kg :values [40.0 70.0 100.0 140.0 180.0]}
+   :quantity :min-tipover-margin
+   :limit {:min 0.6 :basis "estimate: reserve kept at the AMR's 2.0 m/s2 emergency stop (the stop deceleration is also an estimate)"}}]}
