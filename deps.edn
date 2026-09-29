@@ -35,7 +35,7 @@
         io.github.kotoba-lang/langchain
         {:local/root "../../kotoba-lang/langchain"}
         ;; jp-go-dds (デジタル庁デザインシステム) — the workspace's base
-        ;; design system (com-junkawasaki/root CLAUDE.md, 2026-08-05).
+        ;; design system (com-junkawasaki/root AGENTS.md, 2026-08-05).
         ;; Consumed as a git dep, not :local/root, because that is how the
         ;; library itself declares it must be consumed (its own deps.edn:
         ;; a :local/root resolves "../html" inside the consumer's git cache
